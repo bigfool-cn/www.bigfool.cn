@@ -14,13 +14,26 @@ module.exports = {
     ]
   },
   /*
-  ** Customize the progress bar color
-  */
-  loading: { color: '#3B8070' },
+   ** Customize the progress-bar color
+   */
+  loading: { color: '#fff' },
+
+  /*
+   ** Global CSS
+   */
+  css: ['@/assets/css/main.css'],
+
+  plugins: [
+    '@/plugins/element-ui',
+    '@/plugins/main'
+  ],
+
   /*
   ** Build configuration
   */
   build: {
+    transpile: [/^element-ui/],
+
     /*
     ** Run ESLint on save
     */
