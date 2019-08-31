@@ -19,25 +19,27 @@
         </div>
         <div class="l-aside">
             <div class="item">
-                <div class="item-title">标签分类</div>
+                <div class="item-title">
+                    <bigfool-icon name="bookmark" size="1.5" font-unit="rem" color="#007fff" />
+                    标签云
+                </div>
                 <ul class="tags-item">
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
+                    <li v-for="tag in articlesTags" :key="tag.tag_id">
+                         <el-tag :type="tagId === tag.tag_id ?  'default' : 'info'" @click="handleTag(tag.tag_id)">{{ tag.tag_name }}</el-tag>
+                    </li>
                 </ul>
             </div>
             <div class="item">
-                <div class="item-title">热门文章</div>
+                <div class="item-title">
+                    <bigfool-icon name="flame" size="1.5" font-unit="rem" color="#d81e06" />
+                    热门文章
+                </div>
                 <ul class="hot-item">
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
-                    <li>hahahhahahahhahahahhahhahha</li>
+                    <li v-for="hot in hotArticles" :key="hot.article_id">
+                        <nuxt-link :to="{ name: 'articles-id', params: { id: hot.article_id }}" :title="hot.article_title">
+                            {{hot.article_title}}
+                        </nuxt-link>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -47,9 +49,27 @@
 
 <script>
 import BigfoolTotop from '@/components/ToTop'
+import { getHotArticles } from '@/api/blog'
+import { getArticlesTags } from '@/api/tag'
+
 export default {
     name: 'articles',
     components: { BigfoolTotop },
+    async asyncData () {
+        let [hotArticles, articlesTags] = await Promise.all([
+            getHotArticles().then(res => {
+                return res.data.hotArticles
+            }),
+            getArticlesTags().then(res => {
+                return res.data.tags
+            })
+        ])
+        return {
+          hotArticles: hotArticles,
+          articlesTags: articlesTags,
+          tagId: 0
+        }
+    },
     data() {
       return {
         scrollStatus: true,
@@ -71,6 +91,9 @@ export default {
       //     })
       //   }
       // },
+      handleTag(tagId) {
+        this.tagId = tagId
+      },
       handleScroll() {
         this.timer && clearTimeout(this.timer)
         this.timer = setTimeout(this.loadMoreData, 300)
@@ -150,7 +173,7 @@ export default {
         margin-bottom: 1.767rem;
         min-height: 200px;
         li {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             height: 2.2rem;
             line-height: 2.2rem;
             overflow: hidden;
@@ -169,19 +192,37 @@ export default {
         margin-top: 0.5rem;
         li{
             float: left;
-            width: 48%;
-            &:nth-child(2n) {
-                margin-left: 4%;
+            margin-right: 0.6rem;
+            margin-top: 0.6rem;
+            height: 32px;
+            &:hover {
+                color: #007fff;
             }
         }
     }
+    .el-tag.el-tag--info:hover{
+        background-color: #ecf5ff;
+        border: 1px solid #d9ecff;
+        color: #007fff;
+        cursor: pointer;
+    }
     .hot-item {
-        margin-top: 0.5rem;
         li{
             width: 100%;
+            font-size: 1.15rem;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            padding: 0.5rem 0;
+            &:hover {
+                color: #007fff;
+            }
         }
     }
-
+    .ion-bookmark,
+    .ion-flame {
+        position: relative;
+        bottom: -1px;
+    }
     @media (max-width: 980px) {
         .r-aside {
             width: 100%;
