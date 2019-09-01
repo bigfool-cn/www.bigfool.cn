@@ -1,5 +1,11 @@
 <template>
-    <div>{{ articleId }}</div>
+    <div>
+        <template lang="md">
+          ### Hello World!
+
+          Current route is: {{ $route.path }}
+        </template>
+    </div>
 </template>
 
 <script>

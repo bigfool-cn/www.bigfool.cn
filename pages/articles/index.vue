@@ -3,14 +3,25 @@
         <div ref="entry" class="r-aside">
             <div class="aside">
                 <ul>
-                    <nuxt-link to="/">
-                        <li class="aside-item" v-for="item in num" :key="item">
-                            <nuxt-link to="/" class="aside-title">标签分类标签分类标签分类标签分类标签分类标签分类标签分类标签分类标签分类标签分类标签分类标签分类</nuxt-link>
+                    <nuxt-link :to="{ name: 'articles-id', params: {id: article.article_id}}" v-for="article in articles" :key="article.article_id">
+                        <li class="aside-item">
+                            <div class="aside-title">
+                                {{ article.article_title }}
+                            </div>
                             <div class="aside-footer">
-                                <span>一天前</span>
-                                <span>bigfool</span>
-                                <span>1000</span>
-                                <span>CSS</span>
+                                <span :title="article.create_time">
+                                    <bigfool-icon name="calendar" color="#b2bac2" />{{ article.create_time | formatTime}}
+                                </span>
+                                <span>
+                                    <bigfool-icon name="user-circle" color="#b2bac2" />{{ article.article_author }}
+                                </span>
+                                <span>
+                                    <bigfool-icon name="eye" color="#b2bac2" />{{ article.article_read }}
+                                </span>
+                                <bigfool-icon name="bookmark" color="#b2bac2" />
+                                <span v-for="item in article.tags" :key="item.tag_id" class="aside-tag" @click.stop.prevent="handleTag(item)">
+                                    {{ item.tag_name }}
+                                </span>
                             </div>
                         </li>
                     </nuxt-link>
@@ -24,14 +35,14 @@
                     标签云
                 </div>
                 <ul class="tags-item">
-                    <li v-for="tag in articlesTags" :key="tag.tag_id">
-                         <el-tag :type="tagId === tag.tag_id ?  'default' : 'info'" @click="handleTag(tag.tag_id)">{{ tag.tag_name }}</el-tag>
+                    <li v-for="item in articlesTags" :key="item.tag_id">
+                         <el-tag :type="tag.tag_id === item.tag_id ?  'danger' : 'info'" @click="handleTag(item)">{{ item.tag_name }}</el-tag>
                     </li>
                 </ul>
             </div>
             <div class="item">
                 <div class="item-title">
-                    <bigfool-icon name="flame" size="1.5" font-unit="rem" color="#d81e06" />
+                    <bigfool-icon name="fire" size="1.5" font-unit="rem" color="#d81e06" />
                     热门文章
                 </div>
                 <ul class="hot-item">
@@ -49,14 +60,20 @@
 
 <script>
 import BigfoolTotop from '@/components/ToTop'
-import { getHotArticles } from '@/api/blog'
+import { getHotArticles, getArticles } from '@/api/article'
 import { getArticlesTags } from '@/api/tag'
 
 export default {
     name: 'articles',
     components: { BigfoolTotop },
     async asyncData () {
-        let [hotArticles, articlesTags] = await Promise.all([
+        let [articlesItem, hotArticles, articlesTags] = await Promise.all([
+            getArticles({ page: 1 }).then(res => {
+                return {
+                  articles: res.data.articles,
+                  pages: res.data.pages
+                }
+            }),
             getHotArticles().then(res => {
                 return res.data.hotArticles
             }),
@@ -67,32 +84,38 @@ export default {
         return {
           hotArticles: hotArticles,
           articlesTags: articlesTags,
-          tagId: 0
+          articles: articlesItem.articles,
+          pages: articlesItem.pages,
+          tag: {
+            tag_id: null,
+            tag_name: null
+          }
         }
     },
     data() {
       return {
-        scrollStatus: true,
-        num: 100,
+        scrollStatus: true
       }
     },
     mounted() {
-      //this.getFullPageData()
       window.addEventListener('scroll', this.handleScroll)
     },
     destroyed() {
       window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
-      // getFullPageData() {
-      //   if (document.body.offsetHeight < window.innerHeight) {
-      //     this.loadMoreData().then(res => {
-      //       this.getFullPageData()
-      //     })
-      //   }
-      // },
-      handleTag(tagId) {
-        this.tagId = tagId
+      handleTag(tag) {
+        if (this.tag.tag_id === tag.tag_id) {
+          return false
+        }
+        this.tag = tag
+        getArticles({ page: 1, tag_id: tag.tag_id }).then(res => {
+          this.articles = res.data.articles.map(item => {
+            item.tags = [this.tag]
+            return item
+          })
+          this.pages = res.data.pages
+        })
       },
       handleScroll() {
         this.timer && clearTimeout(this.timer)
@@ -107,10 +130,21 @@ export default {
           const containerHeight = ~~style.height.split('px')[0]
           // 设置【返回顶部】显示隐藏
           document.querySelector('.to-top-btn').classList[$el.scrollTop > 120 ? 'add' : 'remove']('show')
-          console.log(($el.scrollTop + clienHeight) + '--' + (containerHeight - 10))
           // 滚动到一定高度，重新加载数据
           if ($el.scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
-            this.num += 50
+            if (this.pages.current_page < this.pages.last_page) {
+              getArticles({ page: this.pages.current_page + 1, tag_id: this.tagId }).then(res => {
+                if (this.tag.tagId) {
+                  this.articles = res.data.articles.forEach(item => {
+                    item.tags[0] = this.tag
+                    return item
+                  })
+                } else  {
+                  this.articles = this.articles.concat(res.data.articles)
+                }
+                this.pages = res.data.pages
+              })
+            }
             resolve()
           }
         })
@@ -122,7 +156,7 @@ export default {
 <style lang="scss" scoped>
 
     .container-body {
-        margin-top: 1.767rem;
+        margin: 1.767rem 0;
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -150,15 +184,15 @@ export default {
         &:hover {
             background-color: #fafdfa;
         }
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
     .aside-title {
         font-size: 1.5rem;
         font-weight: 600;
         color: #2e3135;
         padding-bottom: 0.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         &:hover {
             text-decoration: underline;
         }
@@ -166,6 +200,17 @@ export default {
     .aside-footer{
         padding-top: 0.5rem;
         color: #b2bac2;
+        span {
+            margin-right: 0.6rem;
+            i {
+                margin-right: 0.25rem;
+            }
+        }
+    }
+    .aside-tag {
+        &:hover {
+            color: #f56c6c;
+        }
     }
     .item {
         background-color: #fff;
@@ -200,10 +245,10 @@ export default {
             }
         }
     }
-    .el-tag.el-tag--info:hover{
-        background-color: #ecf5ff;
-        border: 1px solid #d9ecff;
-        color: #007fff;
+    .el-tag:hover{
+        background-color: #fef0f0;
+        border-color: #fde2e2;
+        color: #f56c6c;
         cursor: pointer;
     }
     .hot-item {

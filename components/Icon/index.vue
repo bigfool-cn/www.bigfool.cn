@@ -1,5 +1,5 @@
 <template>
-    <i :class="['icon', `ion-${name}`]" :style="getStyle">
+    <i :class="['fa', `fa-${name}`]" :style="getStyle">
         <slot></slot>
     </i>
 </template>
