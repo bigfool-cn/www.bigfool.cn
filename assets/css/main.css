@@ -8,3 +8,14 @@
   opacity: 0;
 }
 
+/*markdown解析器*/
+.v-note-wrapper .v-note-panel {
+  border: none !important;
+}
+
+.container-body {
+  margin: 1.767rem 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}

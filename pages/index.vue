@@ -1,21 +1,17 @@
 <template>
-  <div class="container-view welcome-view">
     <div class="feed welcome_feed">
       <bigfool-totop />
       <nuxt />
     </div>
-  </div>
 </template>
 
 <script>
-  import BigfoolTotop from '@/components/ToTop'
   export default {
-    components: { BigfoolTotop },
     head () {
       return {
-        title: '首页',
+        title: 'Bigfool - 不正经的程序员',
         meta: [
-          { hid: 'home custom title', name: 'home', content: 'home custom title description' }
+          { hid: 'index', name: 'home', content: 'Bigfool PHP ThinkPHP Laravel JavaScript CSS Vue Nuxt.js Linux Nginx Redis Memcache MySQL 程序员 博客' }
         ]
       }
     }

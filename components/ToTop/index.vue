@@ -1,6 +1,6 @@
 <template>
     <button class="to-top-btn" title="回到顶部" @click="goTop">
-        <bigfool-icon name="android-arrow-dropup" size="16" />
+        <bigfool-icon name="caret-up" size="18" color="#007fff"/>
     </button>
 </template>
 
@@ -31,10 +31,12 @@
         border: 1px solid #f1f1f1;
         border-radius: 50%;
         box-shadow: 0 0 5px rgba(0,0,0,.05);
+        outline:none;
         cursor: pointer;
         display: none;
         transition: all 0.2s;
     }
+
     .to-top-btn.show {
         display: block;
     }

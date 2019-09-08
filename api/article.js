@@ -15,3 +15,10 @@ export function getArticles(params) {
     params
   })
 }
+
+export function getArticle(articleId) {
+  return request({
+    url: '/articles/'+ articleId,
+    method: 'get',
+  })
+}

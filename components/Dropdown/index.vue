@@ -2,7 +2,7 @@
     <div v-clickoutside="hide" class="drop-down">
         <div class="phone-show-menu" @click="handleMenuClick">
             <span>{{ title }}</span>
-            <bigfool-icon name="arrow-down-b" />
+            <bigfool-icon name="sort-down" />
         </div>
         <ul class="phone-hide" :class="{'show': show}">
             <li v-for="(item, index) in items" :key="index" class="nav-item link-item" @click="handleItemClick(item.title)">
@@ -19,6 +19,9 @@
   export default {
     name: 'Dropdown',
     directives: { Clickoutside },
+    async asyncData({route}) {
+
+    },
     data () {
       return {
         show: false,
@@ -26,6 +29,7 @@
         items: [
           { name: 'index', title: '首页' },
           { name: 'articles', title: '文章' },
+          { name: 'tools', title: '工具' },
           { name: 'questions', title: '问答' }
         ]
       }
@@ -33,6 +37,14 @@
     computed: {
       ...mapState({
         isPhone: state => state.isPhone
+      })
+    },
+    mounted () {
+      this.items.forEach(item => {
+        if (item.name === this.$route.name) {
+          this.title = item.title
+          return false
+        }
       })
     },
     methods: {

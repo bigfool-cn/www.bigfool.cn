@@ -17,6 +17,7 @@
 
 <script>
   import BigfoolDropdown from '@/components/Dropdown'
+  import { postVisitor } from '@/api/app'
 
   export default {
     name: 'Header',
@@ -38,6 +39,7 @@
           self.$store.dispatch('settings/pcorPhone', true)
         }
       }
+      postVisitor({ path: this.$route.path}).then(res => {}).catch();
     }
   }
 </script>
