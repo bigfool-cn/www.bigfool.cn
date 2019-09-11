@@ -1,6 +1,6 @@
 <template>
     <div class="rsa-body" v-loading="loading" element-loading-text="拼命生成中...">
-        <div>
+        <div class="bit-radio">
             <el-radio v-model="keyBit" label="1024">1024位</el-radio>
             <el-radio v-model="keyBit" label="2048">2048位</el-radio>
             <el-radio v-model="keyBit" label="11024">1024位(PKCS8)</el-radio>
@@ -52,7 +52,24 @@
 .rsa-body {
     margin: 1.333rem;
 }
+.bit-radio {
+    @media (max-width: 980px) {
+        display: flex;
+        flex-direction: column;
+        label {
+            margin: 0.5rem 0;
+        }
+    }
+}
 .private-key {
     margin: 1.333rem 0;
+    span {
+        font-size: 1.2rem
+    }
+}
+.public-key {
+    span {
+        font-size: 1.2rem
+    }
 }
 </style>

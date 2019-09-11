@@ -58,5 +58,8 @@
     .content,
     .result {
         margin-bottom: 1.333rem;
+        span {
+            font-size: 1.2rem;
+        }
     }
 </style>
