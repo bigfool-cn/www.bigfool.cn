@@ -1,34 +1,24 @@
 <template>
     <div class="container-body">
-        <div ref="entry" class="r-aside">
-            <div class="aside aside-article">
-                <div v-for="item in num" :key="item">{{item}}hahahha</div>
+        <div ref="entry" class="l-aside">
+            <div :class="asideClass" :style="{backgroundImage:'url('+bigfool+')'}" v-on:mouseover="showBigfool" v-on:mouseout="hideBigfool">
             </div>
-            <div class="aside aside-question" >
-                <div v-for="item in num" :key="item">{{item}}hahahha</div>
-            </div>
+            <p :class="bigfoolClass">
+                每一段青春都有一个柯景腾、一个沈佳宜每一段青春都有一个柯景腾、一个沈佳宜
+            </p>
         </div>
-        <div class="l-aside">
-            <div class="item">
+        <div class="r-aside">
+            <div class="item info">
                 <ul class="info-item">
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
+                    <li><img class="avatar" src="~/assets/img/avatar.png"></li>
+                    <li>bigfool</li>
+                    <li>PHP搬砖师</li>
+                    <li><a href="https://github.com/bigfool-cn/" target="_blank" title="gitgub"><bigfool-icon name="github" size="18" /></a></li>
                 </ul>
             </div>
-            <div class="item">
-                <div class="link-title">友情链接</div>
-                <ul class="link-item">
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                    <li>hahahhahahahhahahahha</li>
-                </ul>
+            <div class="item phrase">
+                <el-input type="textarea" v-model="phrase" rows="6" maxlength="52"   show-word-limit resize="none" placeholder="遇上好句子..." />
+                <el-button v-loading="loading" type="primary" size="small" class="phrase-btn" @click="handlePhrase">保存</el-button>
             </div>
             <div class="footer">
                 <p>@2019 Design By Bigfool</p>
@@ -39,52 +29,43 @@
 </template>
 
 <script>
-  let first = 10
+  import { Message } from 'element-ui'
+  import { postPhrase } from '@/api/phrase'
+
   export default {
     name: 'index',
-
-    scrollToTop: true,
     data() {
       return {
-        scrollStatus: true,
-        num: 50,
+        loading: false,
+        bigfool: require('~/assets/img/bigfool.jpg'),
+        asideClass: 'aside',
+        bigfoolClass: 'bigfool',
+        phrase: '',
       }
     },
     mounted() {
-      //this.getFullPageData()
-      window.addEventListener('scroll', this.handleScroll)
     },
-    destroyed() {
-      window.removeEventListener('scroll', this.handleScroll)
-    },
+
     methods: {
-      // getFullPageData() {
-      //   if (document.body.offsetHeight < window.innerHeight) {
-      //     this.loadMoreData().then(res => {
-      //       this.getFullPageData()
-      //     })
-      //   }
-      // },
-      handleScroll() {
-        this.timer && clearTimeout(this.timer)
-        this.timer = setTimeout(this.loadMoreData, 300)
+      showBigfool() {
+        this.asideClass = 'aside aside-bigfool-in'
+        this.bigfoolClass = 'bigfool bigfool-in'
       },
-      loadMoreData () {
-        return new Promise((resolve) => {
-          const $el = document.documentElement
-          const $entry = this.$refs.entry
-          const clienHeight = $el.clientHeight
-          const style = window.getComputedStyle ? window.getComputedStyle($entry, null) : null || $entry.currentStyle
-          const containerHeight = ~~style.height.split('px')[0] + 140
-          // 设置【返回顶部】显示隐藏
-          document.querySelector('.to-top-btn').classList[$el.scrollTop > 120 ? 'add' : 'remove']('show')
-          // 滚动到一定高度，重新加载数据
-          if ($el.scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
-            first += 10
-            this.num += 50
-            resolve()
-          }
-        })
+      hideBigfool() {
+        this.asideClass = 'aside aside-bigfool-out'
+        this.bigfoolClass = 'bigfool bigfool-out'
+      },
+      handlePhrase() {
+        this.loading = true
+        if (!this.phrase.length) {
+          Message.error('请输入好句子！')
+        } else {
+          postPhrase({ phrase: this.phrase }).then(res => {
+            this.phrase = ''
+            Message.success(res.msg)
+          })
+        }
+        this.loading = false
       }
     }
   }
@@ -98,65 +79,355 @@
         width: 100%;
     }
 
-    .r-aside {
+    .l-aside {
         width: 75%;
         height: auto;
     }
 
-    .l-aside {
+    .r-aside {
         margin-left: 1.767rem;
         width: 25%;
         height: auto;
     }
+
     .aside {
-        padding: 1.333rem;
+        text-align: center;
         background-color: #fff;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width: 100%;
+        height: 45rem;
+        &:hover {
+            cursor: pointer;
+            filter: blur(2px);
+        }
     }
-    .aside-article {
-        margin-bottom: 1.767rem;
+    .bigfool {
+        pointer-events: none;
+        padding: 0 8rem;
+        text-align: center;
+        position: relative;
+        top: -25rem;
+        color: #fff;
+        font-size: 2rem;
+        z-index: -1;
     }
-
-    .aside-question {
-
-    }
-
     .item {
         background-color: #fff;
         padding: 1.333rem;
         margin-bottom: 1.767rem;
         min-height: 200px;
     }
-
-    .link-title {
-        font-size: 1.333rem;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #f4f5f5;
+    .info {
+        background-color: #f5e5cb;
     }
-    .link-item {
-        margin-top: 1.333rem;
-        li{
-            float: left;
-            width: 48%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            &:nth-child(2n) {
-                margin-left: 4%;
-            }
+    .info-item {
+        text-align: center;
+        li {
+            padding: 5px 0;
+            font-size: 1.333rem;
         }
-    }
 
+    }
+    .avatar {
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        margin: 0 auto;
+    }
+    .phrase-btn {
+        width: 100%;
+        margin-top: 5px;
+        font-size: 1.2rem;
+    }
     .footer {
         text-align: center;
         padding: 0 1.333rem;
     }
 
     @media (max-width: 980px) {
-        .r-aside {
+        .l-aside {
             width: 100%;
         }
-        .l-aside {
+        .r-aside {
             display: none;
+        }
+        .bigfool {
+            padding: 0 20px;
+        }
+    }
+
+    .aside-bigfool-in {
+        animation: 2s filter-in 0s;
+        -webkit-animation: 2s filter-in 0s;
+        -moz-animation: 2s filter-in 0s;
+    }
+
+    @keyframes filter-in {
+        0% {
+            filter: blur(0px);
+        }
+        25% {
+            filter: blur(0.5px);
+        }
+        50% {
+            filter: blur(1px);
+        }
+        75% {
+            filter: blur(1.5px);
+        }
+        100% {
+            filter: blur(3px);
+        }
+    }
+
+    @-webkit-keyframes filter-in {
+        0% {
+            filter: blur(0px);
+        }
+        25% {
+            filter: blur(0.5px);
+        }
+        50% {
+            filter: blur(1px);
+        }
+        75% {
+            filter: blur(1.5px);
+        }
+        100% {
+            filter: blur(3px);
+        }
+    }
+
+    @-moz-keyframes filter-in {
+        0% {
+            filter: blur(0px);
+        }
+        25% {
+            filter: blur(0.5px);
+        }
+        50% {
+            filter: blur(1px);
+        }
+        75% {
+            filter: blur(1.5px);
+        }
+        100% {
+            filter: blur(3px);
+        }
+    }
+
+    .aside-bigfool-out {
+        animation: 2s filter-out 0s;
+        -webkit-animation: 2s filter-out 0s;
+        -moz-animation: 2s filter-out 0s;
+    }
+
+    @keyframes filter-out {
+        0% {
+            filter: blur(3px);
+        }
+        25% {
+            filter: blur(2.5px);
+        }
+        50% {
+            filter: blur(1.5px);
+        }
+        75% {
+            filter: blur(0.5px);
+        }
+        100% {
+            filter: blur(0px);
+        }
+    }
+
+    @-webkit-keyframes filter-out {
+        0% {
+            filter: blur(3px);
+        }
+        25% {
+            filter: blur(2.5px);
+        }
+        50% {
+            filter: blur(1.5px);
+        }
+        75% {
+            filter: blur(0.5px);
+        }
+        100% {
+            filter: blur(0px);
+        }
+    }
+
+    @-moz-keyframes filter-out {
+        0% {
+            filter: blur(3px);
+        }
+        25% {
+            filter: blur(2.5px);
+        }
+        50% {
+            filter: blur(1.5px);
+        }
+        75% {
+            filter: blur(0.5px);
+        }
+        100% {
+            filter: blur(0px);
+        }
+    }
+
+    .bigfool-in {
+
+        animation: 2s opacity-in 0s;
+        -webkit-animation: 2s opacity-in 0s;
+        -moz-animation: 2s opacity-in 0s;
+        animation-fill-mode: forwards;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+    }
+
+    @keyframes opacity-in {
+        0% {
+            opacity: 0;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        100% {
+            opacity: 1;
+            z-index: 999;
+        }
+    }
+
+    @-webkit-keyframes opacity-in {
+        0% {
+            opacity: 0;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        100% {
+            opacity: 1;
+            z-index: 999;
+        }
+    }
+
+    @-moz-keyframes opacity-in {
+        0% {
+            opacity: 0;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        100% {
+            opacity: 1;
+            z-index: 999;
+        }
+    }
+
+    .bigfool-out {
+        animation: 2s opacity-out 0s;
+        -webkit-animation: 2s opacity-out 0s;
+        -moz-animation: 2s opacity-out 0s;
+    }
+
+    @keyframes opacity-out {
+        0% {
+            opacity: 1;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        100% {
+            opacity: 0;
+            z-index: -1;
+        }
+    }
+
+    @-webkit-keyframes opacity-out {
+        0% {
+            opacity: 1;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        100% {
+            opacity: 0;
+            z-index: -1;
+        }
+    }
+
+    @-moz-keyframes opacity-out {
+        0% {
+            opacity: 1;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.75;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.5;
+            z-index: 999;
+        }
+        50% {
+            opacity: 0.25;
+            z-index: 999;
+        }
+        100% {
+            opacity: 0;
+            z-index: -1;
         }
     }
 </style>

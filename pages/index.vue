@@ -9,7 +9,7 @@
   export default {
     head () {
       return {
-        title: 'Bigfool - 不正经的程序员',
+        title: 'Bigfool - 大笨蛋程序员',
         meta: [
           { hid: 'index', name: 'home', content: 'Bigfool PHP ThinkPHP Laravel JavaScript CSS Vue Nuxt.js Linux Nginx Redis Memcache MySQL 程序员 博客' }
         ]
