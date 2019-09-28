@@ -7,3 +7,10 @@ export function postPhrase(data) {
     data
   })
 }
+
+export function getPhrases(page) {
+  return request({
+    url: '/phrases/'+ page,
+    method: 'get'
+  })
+}

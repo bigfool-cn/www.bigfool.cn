@@ -4,7 +4,7 @@
             <div :class="asideClass" :style="{backgroundImage:'url('+bigfool+')'}" v-on:mouseover="showBigfool" v-on:mouseout="hideBigfool">
             </div>
             <p :class="bigfoolClass">
-                每一段青春都有一个柯景腾、一个沈佳宜每一段青春都有一个柯景腾、一个沈佳宜
+                {{ currentPhrase }}
             </p>
         </div>
         <div class="r-aside">
@@ -17,10 +17,15 @@
                 </ul>
             </div>
             <div class="item phrase">
-                <el-input type="textarea" v-model="phrase" rows="6" maxlength="52"   show-word-limit resize="none" placeholder="遇上好句子..." />
-                <el-button v-loading="loading" type="primary" size="small" class="phrase-btn" @click="handlePhrase">保存</el-button>
+                <el-input type="textarea" v-model="phrase" rows="6" maxlength="52" show-word-limit resize="none" placeholder="遇上好句子..." />
+                <el-button v-loading="loading" type="primary" size="small" class="phrase-btn" @click="handlePhrase">保 存</el-button>
             </div>
             <div class="footer">
+                <ul class="links">
+                    <nuxt-link :to="{ name: 'links' }"><li>友情链接</li></nuxt-link>
+                    <li style="font-weight: bold">·</li>
+                    <li>问题反馈</li>
+                </ul>
                 <p>@2019 Design By Bigfool</p>
                 <p>粤ICP备17147325号-1</p>
             </div>
@@ -30,8 +35,8 @@
 
 <script>
   import { Message } from 'element-ui'
-  import { postPhrase } from '@/api/phrase'
-
+  import { getPhrases, postPhrase } from '@/api/phrase'
+  let phraseIndex = 0
   export default {
     name: 'index',
     data() {
@@ -41,12 +46,43 @@
         asideClass: 'aside',
         bigfoolClass: 'bigfool',
         phrase: '',
+        currentPhrase: '',
+        phrases: [],
+        pages: {
+          current_page: 1,
+          last_page: 1
+        }
+      }
+    },
+    watch: {
+      asideClass:function (newVal, oldVal) {
+        if (this.phrases.length-phraseIndex < 5 && this.pages.current_page < this.pages.last_page)
+        {
+          this.initPhrases(this.pages.current_page+1)
+        }
+        if (newVal === 'aside aside-bigfool-in') {
+          if (this.phrases.length-1 < phraseIndex){
+            phraseIndex = 0
+          }
+          this.currentPhrase = this.phrases[phraseIndex];
+          phraseIndex++
+        }
       }
     },
     mounted() {
+      this.initPhrases(this.pages.current_page)
     },
-
     methods: {
+      initPhrases(page) {
+        getPhrases(page).then(res => {
+         if (res.data.phrases.length) {
+           this.phrases = this.phrases.concat(res.data.phrases)
+         } else {
+           this.phrases = ['每一段青春都有一个柯景腾、一个沈佳宜']
+         }
+         this.pages = res.data.pages
+        })
+      },
       showBigfool() {
         this.asideClass = 'aside aside-bigfool-in'
         this.bigfoolClass = 'bigfool bigfool-in'
@@ -70,9 +106,23 @@
     }
   }
 </script>
-
+<style lang="scss">
+    .el-textarea__inner {
+        background-color: #f5e5cb;
+        border: 1px solid #fff;
+        &:hover{
+            border: 1px solid #fff;
+        }
+        &:focus{
+            border: 1px solid #fff;
+        }
+    }
+    .el-textarea .el-input__count {
+        background-color: #f5e5cb;
+    }
+</style>
 <style lang="scss" scoped>
-
+    $item-bg-color: #f5e5cb;
     .container-body {
         display: flex;
         flex-direction: row;
@@ -119,7 +169,7 @@
         min-height: 200px;
     }
     .info {
-        background-color: #f5e5cb;
+        background-color: $item-bg-color;
     }
     .info-item {
         text-align: center;
@@ -135,14 +185,37 @@
         height: 70px;
         margin: 0 auto;
     }
+    .phrase {
+        background-color: $item-bg-color;
+    }
+
     .phrase-btn {
+        color: #71777c;
         width: 100%;
         margin-top: 5px;
         font-size: 1.2rem;
+        background-color: $item-bg-color;
+        border: 1px solid #fff;
+        &:hover {
+            border: 1px solid #fff;
+        }
     }
     .footer {
         text-align: center;
         padding: 0 1.333rem;
+    }
+
+    .links {
+        list-style: none;
+        li {
+            display: inline-block;
+            padding-right: 8px;
+            padding-bottom: 8px;
+            &:hover {
+                color: #007fff;
+                cursor: pointer;
+            }
+        }
     }
 
     @media (max-width: 980px) {

@@ -100,6 +100,11 @@
         scrollStatus: true
       }
     },
+    head () {
+      return {
+        title: 'Bigfool - 文章',
+      }
+    },
     mounted() {
       window.addEventListener('scroll', this.handleScroll)
     },

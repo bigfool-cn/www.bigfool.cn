@@ -38,6 +38,14 @@
         ]
       }
     },
+    head () {
+      return {
+        title: 'Bigfool - 工具',
+        meta: [
+          { hid: 'tools', name: 'description', content: '在线工具 RSA RSA私钥生成 RSA公钥生成 Base64编码 Base64解码 图片转Base64 MD5哈希 进制转换' }
+        ]
+      }
+    },
     methods: {
       handleMenu(key) {
         this.currentKey = key
