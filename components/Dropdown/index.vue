@@ -30,7 +30,8 @@
           { name: 'index', title: '首页' },
           { name: 'articles', title: '文章' },
           { name: 'tools', title: '工具' },
-          { name: 'questions', title: '问答' }
+          { name: 'links', title: '友链' },
+          { name: 'questions', title: '反馈' }
         ]
       }
     },

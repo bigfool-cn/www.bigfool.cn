@@ -24,7 +24,7 @@
                 <ul class="links">
                     <nuxt-link :to="{ name: 'links' }"><li>友情链接</li></nuxt-link>
                     <li style="font-weight: bold">·</li>
-                    <li>问题反馈</li>
+                    <nuxt-link :to="{ name: 'questions' }"><li>问题反馈</li></nuxt-link>
                 </ul>
                 <p>@2019 Design By Bigfool</p>
                 <p>粤ICP备17147325号-1</p>
@@ -106,21 +106,6 @@
     }
   }
 </script>
-<style lang="scss">
-    .el-textarea__inner {
-        background-color: #f5e5cb;
-        border: 1px solid #fff;
-        &:hover{
-            border: 1px solid #fff;
-        }
-        &:focus{
-            border: 1px solid #fff;
-        }
-    }
-    .el-textarea .el-input__count {
-        background-color: #f5e5cb;
-    }
-</style>
 <style lang="scss" scoped>
     $item-bg-color: #f5e5cb;
     .container-body {
@@ -187,6 +172,19 @@
     }
     .phrase {
         background-color: $item-bg-color;
+        /deep/ .el-textarea__inner {
+            background-color: #f5e5cb;
+            border: 1px solid #fff;
+            &:hover{
+                border: 1px solid #fff;
+            }
+            &:focus{
+                border: 1px solid #fff;
+            }
+        }
+        /deep/ .el-textarea .el-input__count {
+            background-color: #f5e5cb;
+        }
     }
 
     .phrase-btn {
