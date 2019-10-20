@@ -52,7 +52,7 @@
 </template>
 
 <script>
-    import Share from '@/components/Share'
+  import Share from '@/components/Share'
   import {getArticle} from '@/api/article'
 
   export default {
@@ -113,7 +113,10 @@
             }
         }
     }
-    .v-note-wrapper.markdown-body {
+    /deep/ .v-note-wrapper.markdown-body {
         z-index: 0;
+    }
+    /deep/ .v-note-show .v-show-content {
+        background-color: #fff !important;
     }
 </style>

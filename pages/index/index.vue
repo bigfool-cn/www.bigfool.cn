@@ -175,15 +175,22 @@
         /deep/ .el-textarea__inner {
             background-color: #f5e5cb;
             border: 1px solid #fff;
+            z-index: 10000;
             &:hover{
                 border: 1px solid #fff;
             }
             &:focus{
                 border: 1px solid #fff;
+                z-index: 0;
+                background-color: #fff;
             }
         }
-        /deep/ .el-textarea .el-input__count {
+        /deep/ .el-textarea {
             background-color: #f5e5cb;
+        }
+        /deep/ .el-input__count {
+            background-color: transparent;
+            color: #c0c4cc;
         }
     }
 

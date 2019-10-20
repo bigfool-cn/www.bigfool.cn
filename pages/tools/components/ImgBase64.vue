@@ -20,6 +20,8 @@
 
 <script>
   import { Message } from 'element-ui'
+  import { sendWebSocketData } from '@/utils/websocket'
+
   export default {
     name: 'ImgBase64',
     data() {
@@ -30,7 +32,15 @@
       }
     },
     methods: {
+      sendWsData() {
+        let data = {
+          type: 'tools',
+          data: '图片转Base64'
+        }
+        sendWebSocketData(data)
+      },
       getFile(file, fileList) {
+        this.sendWsData()
         this.fileList = [{
           name: file.name,
           url: ''

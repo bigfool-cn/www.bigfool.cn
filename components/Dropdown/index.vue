@@ -5,9 +5,11 @@
             <bigfool-icon name="sort-down" />
         </div>
         <ul class="phone-hide" :class="{'show': show}">
-            <li v-for="(item, index) in items" :key="index" class="nav-item link-item" @click="handleItemClick(item.title)">
-                <nuxt-link :to="{ name: item.name }">{{ item.title }}</nuxt-link>
-            </li>
+            <nuxt-link  v-for="(item, index) in items" :key="index" :to="{ name: item.name }"  @click="handleItemClick(item.title)">
+                <li class="nav-item link-item">
+                    {{ item.title }}
+                </li>
+            </nuxt-link>
         </ul>
     </div>
 </template>
@@ -74,6 +76,9 @@
     .phone-hide {
         display: flex;
         .nuxt-link-exact-active {
+            li{
+                color:#007fff
+            }
             color:#007fff
         }
     }

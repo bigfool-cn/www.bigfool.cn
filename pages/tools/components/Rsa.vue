@@ -20,6 +20,8 @@
 
 <script>
   import { getRsa } from '@/api/tools'
+  import { sendWebSocketData } from '@/utils/websocket'
+
   export default {
     name: 'Rsa',
     data() {
@@ -33,7 +35,15 @@
       }
     },
     methods: {
+      sendWsData() {
+        let data = {
+          type: 'tools',
+          data: 'RSA私/公钥'
+        }
+        sendWebSocketData(data)
+      },
       handleCreate() {
+        this.sendWsData()
         this.loading = true
         getRsa(this.keyBit).then(res => {
           this.rsa = {

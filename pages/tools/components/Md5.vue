@@ -39,6 +39,8 @@
 
 <script>
   import MD5 from 'js-md5'
+  import { sendWebSocketData } from '@/utils/websocket'
+
   export default {
     name: 'Md5',
     data() {
@@ -56,7 +58,15 @@
       }
     },
     methods: {
+      sendWsData() {
+        let data = {
+          type: 'tools',
+          data: 'MD5哈希'
+        }
+        sendWebSocketData(data)
+      },
       handleCreate() {
+        this.sendWsData()
         if (this.str.length) {
           this.loading = true
           let md5Str = MD5(this.str)

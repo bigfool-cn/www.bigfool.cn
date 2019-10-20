@@ -14,6 +14,11 @@
     name: 'links',
     async asyncData() {
         return getLinks().then(res => {
+          const concat = {
+            link_url: 'http://wpa.qq.com/msgrd?v=3&uin=1063944784&site=qq&menu=yes',
+            link_name: '交换友链，联系QQ:1063944784'
+          }
+          res.data.links.splice(0,0,concat)
           return {
             links: res.data.links,
             color: color

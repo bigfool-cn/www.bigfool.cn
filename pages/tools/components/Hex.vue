@@ -64,6 +64,8 @@
 <script>
   import ToolsHex from '@/utils/tools-hex'
   import { Message } from 'element-ui'
+  import { sendWebSocketData } from '@/utils/websocket'
+
   export default {
     name: 'Hex',
     data() {
@@ -83,7 +85,15 @@
       }
     },
     methods: {
+      sendWsData() {
+        let data = {
+          type: 'tools',
+          data: '进制转换'
+        }
+        sendWebSocketData(data)
+      },
       handleCreate() {
+        this.sendWsData()
         try {
           this.hexResult = ToolsHex(this.hex,this.hexType)
         } catch (e) {

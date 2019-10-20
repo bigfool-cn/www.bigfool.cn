@@ -66,7 +66,6 @@
 <script>
   import {getHotArticles, getArticles} from '@/api/article'
   import {getArticlesTags} from '@/api/tag'
-
   export default {
     name: 'articles',
     async asyncData() {

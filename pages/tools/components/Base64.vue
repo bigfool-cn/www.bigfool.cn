@@ -15,6 +15,7 @@
 
 <script>
   import { Message } from 'element-ui'
+  import { sendWebSocketData } from '@/utils/websocket'
   export default {
     name: 'Base64',
     data() {
@@ -25,7 +26,15 @@
       }
     },
     methods: {
+      sendWsData() {
+        let data = {
+          type: 'tools',
+          data: 'Base64解/编码'
+        }
+        sendWebSocketData(data)
+      },
       handleEncode() {
+        this.sendWsData()
         this.loading = true
         if (this.content.trim()) {
           try {
@@ -37,6 +46,7 @@
         this.loading = false
       },
       handleDecode() {
+        this.sendWsData()
         this.loading = true
         if (this.content.trim()) {
           try {
