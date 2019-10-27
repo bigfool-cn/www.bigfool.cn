@@ -1,9 +1,12 @@
 <template>
     <div class="container-body links">
         <ul class="links-item">
-            <a v-for="(link, index) in links" :key="index" :href="link.link_url" target="_blank"><li class="link" :style="{backgroundColor: color[index]}">{{ link.link_name }}</li></a>
+            <a class="link" v-for="(link, index) in links" :key="index" :href="link.link_url" :title="link.title" target="_blank">
+                <li  :style="{backgroundColor: color[index]}">{{ link.link_name }}</li>
+            </a>
             <li class="link" v-if="links.length % 3 === 2"></li>
         </ul>
+        <bigfool-share />
     </div>
 </template>
 
@@ -16,7 +19,8 @@
         return getLinks().then(res => {
           const concat = {
             link_url: 'http://wpa.qq.com/msgrd?v=3&uin=1063944784&site=qq&menu=yes',
-            link_name: '交换友链，联系QQ:1063944784'
+            link_name: '交换友链',
+            title: '联系QQ:1063944784'
           }
           res.data.links.splice(0,0,concat)
           return {

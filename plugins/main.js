@@ -2,10 +2,13 @@ import Vue from 'vue'
 // import Header from '@/components/header'
 import Icon from '@/components/Icon'
 import Totop from '@/components/ToTop'
+import Share from '@/components/Share'
+
 
 // Vue.component(Header.name, Header)
 Vue.component('BigfoolIcon', Icon)
 Vue.component('BigfoolTotop', Totop)
+Vue.component('BigfoolShare', Share)
 
 Vue.filter('formatTime',  (value) => {
   value = value.replace(/-/g,'/')

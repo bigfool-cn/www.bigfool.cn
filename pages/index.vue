@@ -1,5 +1,6 @@
 <template>
     <div class="feed welcome_feed">
+      <bigfool-share />
       <bigfool-totop />
       <nuxt />
     </div>

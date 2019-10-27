@@ -25,7 +25,6 @@
                     <mavon-editor v-model="article.article_content" :subfield="false" defaultOpen="preview"
                                   :ishljs="true" :toolbarsFlag="false" :boxShadow="false" />
                 </client-only>
-                <share />
             </div>
         </div>
         <div class="l-aside">
@@ -47,7 +46,7 @@
                 </ul>
             </div>
         </div>
-        <bigfool-totop />
+        <bigfool-share />
     </div>
 </template>
 

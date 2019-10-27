@@ -14,6 +14,7 @@
             <md5 v-if="currentKey === 'md5'" />
             <hex v-if="currentKey === 'hex'" />
         </div>
+        <bigfool-share />
     </div>
 </template>
 

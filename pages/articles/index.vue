@@ -59,6 +59,7 @@
                 </ul>
             </div>
         </div>
+        <bigfool-share />
         <bigfool-totop />
     </div>
 </template>
@@ -131,14 +132,15 @@
       loadMoreData() {
         return new Promise((resolve) => {
           const $el = document.documentElement
+          const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
           const $entry = this.$refs.entry
           const clienHeight = $el.clientHeight
           const style = window.getComputedStyle ? window.getComputedStyle($entry, null) : null || $entry.currentStyle
           const containerHeight = ~~style.height.split('px')[0]
           // 设置【返回顶部】显示隐藏
-          document.querySelector('.to-top-btn').classList[$el.scrollTop > 120 ? 'add' : 'remove']('show')
+          document.querySelector('.to-top-btn').classList[scrollTop > 120 ? 'add' : 'remove']('show')
           // 滚动到一定高度，重新加载数据
-          if ($el.scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
+          if (scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
             if (this.pages.current_page < this.pages.last_page) {
               getArticles({page: this.pages.current_page + 1, tag_id: this.tagId}).then(res => {
                 if (this.tag.tagId) {

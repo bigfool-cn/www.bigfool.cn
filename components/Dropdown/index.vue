@@ -5,8 +5,8 @@
             <bigfool-icon name="sort-down" />
         </div>
         <ul class="phone-hide" :class="{'show': show}">
-            <nuxt-link  v-for="(item, index) in items" :key="index" :to="{ name: item.name }"  @click="handleItemClick(item.title)">
-                <li class="nav-item link-item">
+            <nuxt-link  v-for="(item, index) in items" :key="index" :to="{ name: item.name }">
+                <li class="nav-item link-item" @click="handleItemClick(item.title)">
                     {{ item.title }}
                 </li>
             </nuxt-link>

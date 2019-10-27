@@ -11,7 +11,7 @@
         </el-radio-group>
         <div class="hex-inpbtn">
             <el-input type="text" v-model="hex" style="margin-right: 15px">
-                <template slot="prepend">内容</template>
+                <template slot="prepend">整数</template>
             </el-input>
             <el-button type="primary" @click="handleCreate">转换</el-button>
         </div>
@@ -81,6 +81,13 @@
           hex_322: '',
           hex_62: '',
           hex_64: '',
+        }
+      }
+    },
+    watch: {
+      hex(val,oldVal) {
+        if (typeof val !== 'number') {
+          this.hex = oldVal
         }
       }
     },

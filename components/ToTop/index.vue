@@ -10,6 +10,7 @@
     methods: {
       goTop() {
         document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
       }
     }
   }
@@ -20,7 +21,7 @@
     .to-top-btn {
         position: fixed;
         right: 2rem;
-        bottom: 3rem;
+        bottom: 0rem;
         z-index: 1000;
         padding: 0;
         width: 3.33rem;

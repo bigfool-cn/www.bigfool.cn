@@ -9,7 +9,7 @@
         >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div slot="tip" class="el-upload__tip" style="color: #f56c6c">只能上传jpg/jpeg/png/gif/svg/bmp文件，且不超过10M</div>
+            <div slot="tip" class="el-upload__tip" style="color: #f56c6c">只能上传jpg/jpeg/png/gif/svg/bmp文件，且不超过1M</div>
         </el-upload>
         <div class="base64">
             <span style="font-size: 1.1rem">Base64:</span>
@@ -52,9 +52,9 @@
           Message.error('上传图片类型不是'+suffixs.join(','))
           return false
         }
-        if (file.size > 1024*1024*10) {
+        if (file.size > 1024*1024*1) {
           this.$refs['upload'].clearFiles();
-          Message.error('文件大小超过10M')
+          Message.error('文件大小超过1M')
           return false
         }
         this.getBase64(file.raw).then(res => {
