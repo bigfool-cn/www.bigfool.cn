@@ -44,7 +44,7 @@
       script:
         [
           {
-            src: 'http://test.bigfool.cn/qrcode.min.js'
+            src: 'https://www.bigfool.cn/qrcode.min.js'
           }
         ]
     },
@@ -63,7 +63,7 @@
     },
     mounted() {
       let url = document.URL
-      let title = document.title
+      let title = this.title ? this.title : document.title
       let qqParams = `?url=${url}&sharesource=qzone&title=${title}&pics=&summary=Bigfool-大笨蛋程序员&desc=`
       this.qqShareLink = this.qqShareLink + qqParams
     },

@@ -6,7 +6,7 @@
             </a>
             <li class="link" v-if="links.length % 3 === 2"></li>
         </ul>
-        <bigfool-share />
+        <bigfool-share title="Bigfool - 友情链接"/>
     </div>
 </template>
 

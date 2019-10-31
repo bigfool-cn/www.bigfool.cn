@@ -55,7 +55,6 @@ export function sendWebSocketData(data) {
 /**关闭WS */
 export function onclose() {
   clearInterval(setIntervalWebSocketPing)
-  console.log('websocket已断开')
 }
 
 /**发送心跳 */

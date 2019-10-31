@@ -28,14 +28,6 @@
     components: {
       BigfoolDropdown
     },
-    head:{
-      script:
-        [
-          {
-            src: '//cdn.jsdelivr.net/npm/eruda'
-          }
-        ]
-    },
     data () {
       return {
         onlineCount: 0,
@@ -44,7 +36,6 @@
     },
     mounted () {
       const self = this
-      eruda.init();
       let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
       if (flag) {
         self.$store.dispatch('settings/pcorPhone', true)

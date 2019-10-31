@@ -21,7 +21,7 @@
     .to-top-btn {
         position: fixed;
         right: 2rem;
-        bottom: 0rem;
+        bottom: 2rem;
         z-index: 1000;
         padding: 0;
         width: 3.33rem;

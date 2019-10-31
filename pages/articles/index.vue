@@ -31,14 +31,14 @@
             </div>
         </div>
         <div class="l-aside">
-            <div class="item">
+            <div class="item tags">
                 <div class="item-title">
                     <bigfool-icon name="bookmark" size="1.5" font-unit="rem" color="#007fff" />
                     标签云
                 </div>
                 <ul class="tags-item">
                     <li v-for="item in articlesTags" :key="item.tag_id">
-                        <el-tag :type="tag.tag_id === item.tag_id ?  'danger' : 'info'" @click="handleTag(item)">{{
+                        <el-tag v-if="item.tag_id" :type="tag.tag_id === item.tag_id ?  'danger' : 'info'" @click="handleTag(item)">{{
                             item.tag_name }}
                         </el-tag>
                     </li>
@@ -59,7 +59,7 @@
                 </ul>
             </div>
         </div>
-        <bigfool-share />
+        <bigfool-share title="Bigfool - 文章"/>
         <bigfool-totop />
     </div>
 </template>
@@ -118,10 +118,7 @@
         }
         this.tag = tag
         getArticles({page: 1, tag_id: tag.tag_id}).then(res => {
-          this.articles = res.data.articles.map(item => {
-            item.tags = [this.tag]
-            return item
-          })
+          this.articles = res.data.articles
           this.pages = res.data.pages
         })
       },
@@ -142,15 +139,8 @@
           // 滚动到一定高度，重新加载数据
           if (scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
             if (this.pages.current_page < this.pages.last_page) {
-              getArticles({page: this.pages.current_page + 1, tag_id: this.tagId}).then(res => {
-                if (this.tag.tagId) {
-                  this.articles = res.data.articles.forEach(item => {
-                    item.tags[0] = this.tag
-                    return item
-                  })
-                } else {
-                  this.articles = this.articles.concat(res.data.articles)
-                }
+              getArticles({page: this.pages.current_page + 1, tag_id: this.tag.tag_id}).then(res => {
+                this.articles = this.articles.concat(res.data.articles)
                 this.pages = res.data.pages
               })
             }
@@ -172,7 +162,6 @@
         &:nth-child(1) {
             border-top: 1px solid #f4f5f5;
         }
-
         &:hover {
             background-color: #fafdfa;
         }
@@ -204,7 +193,10 @@
             }
         }
     }
-
+    .tags {
+        zoom: 1;
+        overflow:auto;
+    }
     .tags-item {
         margin-top: 0.5rem;
 

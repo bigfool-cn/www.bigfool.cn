@@ -46,7 +46,7 @@
                 </ul>
             </div>
         </div>
-        <bigfool-share />
+        <bigfool-share :title="article.article_title"/>
     </div>
 </template>
 
@@ -69,14 +69,14 @@
     data() {
       return {
         articleId: 0,
-        content: 'Bigfool PHP ThinkPHP Laravel JavaScript CSS Vue Nuxt.js Linux Nginx Redis Memcache MySQL 程序员 博客'
+        content: 'Bigfool-大笨蛋程序员,一个PHP从业者记录学习过程所遇技术点的博客站点，并将所学技术应用到Bigfool博客站点，技术点囊括：PHP php ThinkPHP thinkphp Laravel laravel JavaScript javascript CSS css Vue vue Nuxt.js nuxt.js Linux linux Nginx nginx Redis redis Memcache memcache MySQL mysql Docker ocker等等'
       }
     },
     head () {
       return {
         title: this.article.article_title,
         meta: [
-          { hid: 'article', name: 'description', content: this.article.article_title + this.content }
+          { hid: 'article', name: 'description', content: this.article.article_title + ' ' + this.content }
         ]
       }
     },

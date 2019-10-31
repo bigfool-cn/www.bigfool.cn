@@ -4,7 +4,7 @@
             <el-input type="textarea" v-model="question" rows="15" maxlength="500" show-word-limit resize="none" placeholder="说点什么..." />
             <el-button v-loading="loading" type="primary" size="small" @click="handleSubmit">保 存</el-button>
         </div>
-        <bigfool-share />
+        <bigfool-share title="Bigfool - 问题反馈"/>
     </div>
 </template>
 
