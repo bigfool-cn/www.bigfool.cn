@@ -47,6 +47,7 @@
             </div>
         </div>
         <bigfool-share :title="article.article_title"/>
+        <bigfool-totop />
     </div>
 </template>
 
@@ -82,7 +83,19 @@
     },
     created() {
       this.articleId = this.$route.params.id
-    }
+    },
+    mounted() {
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    methods: {
+      handleScroll() {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        document.querySelector('.to-top-btn').classList[scrollTop > 120 ? 'add' : 'remove']('show')
+      }
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
   }
 </script>
 
@@ -117,5 +130,8 @@
     }
     /deep/ .v-note-show .v-show-content {
         background-color: #fff !important;
+    }
+    /deep/ .hljs{
+        background: #f4f5f5;
     }
 </style>
