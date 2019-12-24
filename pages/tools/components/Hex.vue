@@ -72,7 +72,7 @@
       return {
         loading: false,
         hexType: 10,
-        hex: null,
+        hex: '',
         hexResult:{
           hex_2: '',
           hex_8: '',
@@ -81,13 +81,6 @@
           hex_322: '',
           hex_62: '',
           hex_64: '',
-        }
-      }
-    },
-    watch: {
-      hex(val,oldVal) {
-        if (typeof val !== 'number') {
-          this.hex = oldVal
         }
       }
     },
@@ -102,6 +95,9 @@
       handleCreate() {
         this.sendWsData()
         try {
+          if (typeof val !== 'number') {
+            return Message.error('请输入有效整数')
+          }
           this.hexResult = ToolsHex(this.hex,this.hexType)
         } catch (e) {
           Message.error('转换失败，请检查输入内容是否正确!')

@@ -64,7 +64,7 @@
             line-height: 50px;
             margin-bottom: 20px;
             &:hover {
-                font-size: 1.5rem;
+                animation: links 1s forwards;
             }
         }
         @media (max-width: 415px){
@@ -86,5 +86,11 @@
             }
         }
 
+    }
+    @keyframes links {
+      100% {
+        font-size: 2rem;
+        transform: translateY(-3px);
+      }
     }
 </style>

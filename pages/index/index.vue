@@ -1,511 +1,256 @@
 <template>
     <div class="container-body">
-        <div ref="entry" class="l-aside">
-            <div :class="asideClass" :style="{backgroundImage:'url('+bigfool+')'}" v-on:mouseover="showBigfool" v-on:mouseout="hideBigfool">
-            </div>
-            <p :class="bigfoolClass">
-                {{ currentPhrase }}
-            </p>
-        </div>
-        <div class="r-aside">
-            <div class="item info">
-                <ul class="info-item">
-                    <li><img class="avatar" src="~/assets/img/avatar.png"></li>
-                    <li>bigfool</li>
-                    <li>PHP搬砖师</li>
-                    <li><a href="https://github.com/bigfool-cn/" target="_blank" title="gitgub"><bigfool-icon name="github" size="18" /></a></li>
+        <div ref="entry" class="r-aside">
+            <div class="aside">
+                <ul>
+                    <nuxt-link :to="{ name: 'index-id', params: {id: article.article_id}}"
+                               v-for="article in articles" :key="article.article_id">
+                        <li class="aside-item">
+                            <div class="aside-title">
+                                {{ article.article_title }}
+                            </div>
+                            <div class="aside-footer">
+                                <span :title="article.create_time">
+                                    <bigfool-icon name="calendar" color="#b2bac2" />{{ article.create_time | formatTime}}
+                                </span>
+                                <span>
+                                    <bigfool-icon name="user-circle" color="#b2bac2" />{{ article.article_author }}
+                                </span>
+                                <span>
+                                    <bigfool-icon name="eye" color="#b2bac2" />{{ article.article_read }}
+                                </span>
+                                <bigfool-icon name="bookmark" color="#b2bac2" />
+                                <span v-for="item in article.tags" :key="item.tag_id" class="aside-tag"
+                                      @click.stop.prevent="handleTag(item)">
+                                    {{ item.tag_name }}
+                                </span>
+                            </div>
+                        </li>
+                    </nuxt-link>
                 </ul>
             </div>
-            <div class="item phrase">
-                <el-input type="textarea" v-model="phrase" rows="6" maxlength="52" show-word-limit resize="none" placeholder="遇上好句子..." />
-                <el-button v-loading="loading" type="primary" size="small" class="phrase-btn" @click="handlePhrase">保 存</el-button>
+        </div>
+        <div class="l-aside">
+            <div class="item tags">
+                <div class="item-title">
+                    <bigfool-icon name="bookmark" size="1.5" font-unit="rem" color="#007fff" />
+                    标签云
+                </div>
+                <ul class="tags-item">
+                    <li v-for="item in articlesTags" :key="item.tag_id">
+                        <el-tag v-if="item.tag_id" :type="tag.tag_id === item.tag_id ?  'danger' : 'info'" @click="handleTag(item)">{{
+                            item.tag_name }}
+                        </el-tag>
+                    </li>
+                </ul>
+            </div>
+            <div class="item">
+                <div class="item-title">
+                    <bigfool-icon name="fire" size="1.5" font-unit="rem" color="#d81e06" />
+                    热门文章
+                </div>
+                <ul class="li-item">
+                    <li v-for="hot in hotArticles" :key="hot.article_id">
+                        <nuxt-link :to="{ name: 'index-id', params: { id: hot.article_id }}"
+                                   :title="hot.article_title">
+                            {{hot.article_title}}
+                        </nuxt-link>
+                    </li>
+                </ul>
             </div>
             <div class="footer">
-                <ul class="links">
-                    <nuxt-link :to="{ name: 'links' }"><li>友情链接</li></nuxt-link>
-                    <li style="font-weight: bold">·</li>
-                    <nuxt-link :to="{ name: 'questions' }"><li>问题反馈</li></nuxt-link>
-                </ul>
-                <p>@2019 Design By Bigfool</p>
-                <p>粤ICP备17147325号-1</p>
+              <p>@2019 Design By Bigfool</p>
+              <p><a href="http://beian.miit.gov.cn" target="_blank">粤ICP备17147325号-1</a></p>
             </div>
         </div>
+        <bigfool-share title="Bigfool - 文章"/>
+        <bigfool-totop />
     </div>
 </template>
 
 <script>
-  import { Message } from 'element-ui'
-  import { getPhrases, postPhrase } from '@/api/phrase'
-  let phraseIndex = 0
+  import {getHotArticles, getArticles} from '@/api/article'
+  import {getArticlesTags} from '@/api/tag'
   export default {
-    name: 'index',
-    data() {
+    name: 'articles',
+    async asyncData() {
+      let [articlesItem, hotArticles, articlesTags] = await Promise.all([
+        getArticles({page: 1}).then(res => {
+          return {
+            articles: res.data.articles,
+            pages: res.data.pages
+          }
+        }),
+        getHotArticles().then(res => {
+          return res.data.hotArticles
+        }),
+        getArticlesTags().then(res => {
+          return res.data.tags
+        })
+      ])
       return {
-        loading: false,
-        bigfool: require('~/assets/img/bigfool.jpg'),
-        asideClass: 'aside',
-        bigfoolClass: 'bigfool',
-        phrase: '',
-        currentPhrase: '',
-        phrases: [],
-        pages: {
-          current_page: 1,
-          last_page: 1
+        hotArticles: hotArticles,
+        articlesTags: articlesTags,
+        articles: articlesItem.articles,
+        pages: articlesItem.pages,
+        tag: {
+          tag_id: null,
+          tag_name: null
         }
       }
     },
-    watch: {
-      asideClass:function (newVal, oldVal) {
-        if (this.phrases.length-phraseIndex < 5 && this.pages.current_page < this.pages.last_page)
-        {
-          this.initPhrases(this.pages.current_page+1)
-        }
-        if (newVal === 'aside aside-bigfool-in') {
-          if (this.phrases.length-1 < phraseIndex){
-            phraseIndex = 0
-          }
-          this.currentPhrase = this.phrases[phraseIndex];
-          phraseIndex++
-        }
+    data() {
+      return {
+        scrollStatus: true
+      }
+    },
+    head () {
+      return {
+        title: 'Bigfool - 文章',
+      }
+    },
+    created() {
+      if (this.$route.params.tag_id && this.$route.params.tag_name) {
+        this.tag.tag_id = this.$route.params.tag_id
+        this.tag.tag_name = this.$route.params.tag_name
+        getArticles({page: 1, tag_id: this.tag.tag_id}).then(res => {
+          this.articles = res.data.articles
+          this.pages = res.data.pages
+        })
       }
     },
     mounted() {
-      this.initPhrases(this.pages.current_page)
+      window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {
-      initPhrases(page) {
-        getPhrases(page).then(res => {
-         if (res.data.phrases.length) {
-           this.phrases = this.phrases.concat(res.data.phrases)
-         } else {
-           this.phrases = ['每一段青春都有一个柯景腾、一个沈佳宜']
-         }
-         this.pages = res.data.pages
+      handleTag(tag) {
+        if (this.tag.tag_id === tag.tag_id) {
+          return false
+        }
+        this.tag = tag
+        getArticles({page: 1, tag_id: tag.tag_id}).then(res => {
+          this.articles = res.data.articles
+          this.pages = res.data.pages
         })
       },
-      showBigfool() {
-        this.asideClass = 'aside aside-bigfool-in'
-        this.bigfoolClass = 'bigfool bigfool-in'
+      handleScroll() {
+        this.timer && clearTimeout(this.timer)
+        this.timer = setTimeout(this.loadMoreData, 300)
       },
-      hideBigfool() {
-        this.asideClass = 'aside aside-bigfool-out'
-        this.bigfoolClass = 'bigfool bigfool-out'
-      },
-      handlePhrase() {
-        this.loading = true
-        if (!this.phrase.length) {
-          Message.error('请输入好句子！')
-        } else {
-          postPhrase({ phrase: this.phrase }).then(res => {
-            this.phrase = ''
-            Message.success(res.msg)
-          })
-        }
-        this.loading = false
+      loadMoreData() {
+        return new Promise((resolve) => {
+          const $el = document.documentElement
+          const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+          const $entry = this.$refs.entry
+          const clienHeight = $el.clientHeight
+          const style = window.getComputedStyle ? window.getComputedStyle($entry, null) : null || $entry.currentStyle
+          const containerHeight = ~~style.height.split('px')[0]
+          // 设置【返回顶部】显示隐藏
+          document.querySelector('.to-top-btn').classList[scrollTop > 120 ? 'add' : 'remove']('show')
+          // 滚动到一定高度，重新加载数据
+          if (scrollTop + clienHeight > containerHeight - 10 && this.scrollStatus) {
+            if (this.pages.current_page < this.pages.last_page) {
+              getArticles({page: this.pages.current_page + 1, tag_id: this.tag.tag_id}).then(res => {
+                this.articles = this.articles.concat(res.data.articles)
+                this.pages = res.data.pages
+              })
+            }
+            resolve()
+          }
+        })
       }
     }
   }
 </script>
+
 <style lang="scss" scoped>
-    $item-bg-color: #f5e5cb;
-    .container-body {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-    }
+    @import "~/assets/css/content-item.scss";
 
-    .l-aside {
-        width: 75%;
-        height: auto;
-    }
-
-    .r-aside {
-        margin-left: 1.767rem;
-        width: 25%;
-        height: auto;
-    }
-
-    .aside {
-        text-align: center;
-        background-color: #fff;
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        width: 100%;
-        height: 45rem;
+    .aside-item {
+        border-bottom: 1px solid #f4f5f5;
+        padding: 1.5rem 2rem;
+        &:nth-child(1) {
+            border-top: 1px solid #f4f5f5;
+        }
         &:hover {
-            cursor: pointer;
-            filter: blur(2px);
+            background-color: rgba(136, 204, 233, 0.21);
+            animation: articleItem 1s forwards;
+            -webkit-animation: articleItem 1s forwards;
+            -moz-animation:  articleItem 1s forwards;
+            -o-animation: articleItem 1s forwards;
         }
     }
-    .bigfool {
-        pointer-events: none;
-        padding: 0 8rem;
-        text-align: center;
-        position: relative;
-        top: -25rem;
-        color: #fff;
-        font-size: 2rem;
-        z-index: -1;
-    }
-    .item {
-        background-color: #fff;
-        padding: 1.333rem;
-        margin-bottom: 1.767rem;
-        min-height: 200px;
-    }
-    .info {
-        background-color: $item-bg-color;
-    }
-    .info-item {
-        text-align: center;
-        li {
-            padding: 5px 0;
-            font-size: 1.333rem;
-        }
 
+    .aside-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2e3135;
+        padding-bottom: 0.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:hover {
+            text-decoration: none;
+        }
     }
-    .avatar {
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        margin: 0 auto;
-    }
-    .phrase {
-        background-color: $item-bg-color;
-        /deep/ .el-textarea__inner {
-            background-color: #f5e5cb;
-            border: 1px solid #fff;
-            z-index: 10000;
-            &:hover{
-                border: 1px solid #fff;
-            }
-            &:focus{
-                border: 1px solid #fff;
-                z-index: 0;
-                background-color: #fff;
+
+    .aside-footer {
+        padding-top: 0.5rem;
+        color: #b2bac2;
+
+        span {
+            margin-right: 0.6rem;
+
+            i {
+                margin-right: 0.25rem;
             }
         }
-        /deep/ .el-textarea {
-            background-color: #f5e5cb;
-        }
-        /deep/ .el-input__count {
-            background-color: transparent;
-            color: #c0c4cc;
-        }
     }
+    .tags {
+        zoom: 1;
+        overflow:auto;
+    }
+    .tags-item {
+        margin-top: 0.5rem;
 
-    .phrase-btn {
-        color: #71777c;
-        width: 100%;
-        margin-top: 5px;
-        font-size: 1.2rem;
-        background-color: $item-bg-color;
-        border: 1px solid #fff;
-        &:hover {
-            border: 1px solid #fff;
-        }
-    }
-    .footer {
-        text-align: center;
-        padding: 0 1.333rem;
-    }
-
-    .links {
-        list-style: none;
         li {
-            display: inline-block;
-            padding-right: 8px;
-            padding-bottom: 8px;
+            float: left;
+            margin-right: 0.6rem;
+            margin-top: 0.6rem;
+            height: 32px;
+
             &:hover {
                 color: #007fff;
-                cursor: pointer;
             }
         }
     }
 
-    @media (max-width: 980px) {
-        .l-aside {
-            width: 100%;
-        }
-        .r-aside {
-            display: none;
-        }
-        .bigfool {
-            padding: 0 20px;
-        }
+    .el-tag:hover {
+        background-color: #fef0f0;
+        border-color: #fde2e2;
+        color: #f56c6c;
+        cursor: pointer;
     }
 
-    .aside-bigfool-in {
-        animation: 2s filter-in 0s;
-        -webkit-animation: 2s filter-in 0s;
-        -moz-animation: 2s filter-in 0s;
+    .ion-bookmark,
+    .ion-flame {
+        position: relative;
+        bottom: -1px;
     }
 
-    @keyframes filter-in {
-        0% {
-            filter: blur(0px);
-        }
-        25% {
-            filter: blur(0.5px);
-        }
-        50% {
-            filter: blur(1px);
-        }
-        75% {
-            filter: blur(1.5px);
-        }
-        100% {
-            filter: blur(3px);
-        }
+    .footer {
+      text-align: center;
+      padding: 0 1.333rem;
     }
 
-    @-webkit-keyframes filter-in {
-        0% {
-            filter: blur(0px);
-        }
-        25% {
-            filter: blur(0.5px);
-        }
-        50% {
-            filter: blur(1px);
-        }
-        75% {
-            filter: blur(1.5px);
-        }
-        100% {
-            filter: blur(3px);
-        }
+    @keyframes articleItem {
+      100% {
+        transform: translateY(-3px) translateZ(0);
+      }
     }
 
-    @-moz-keyframes filter-in {
-        0% {
-            filter: blur(0px);
-        }
-        25% {
-            filter: blur(0.5px);
-        }
-        50% {
-            filter: blur(1px);
-        }
-        75% {
-            filter: blur(1.5px);
-        }
-        100% {
-            filter: blur(3px);
-        }
-    }
-
-    .aside-bigfool-out {
-        animation: 2s filter-out 0s;
-        -webkit-animation: 2s filter-out 0s;
-        -moz-animation: 2s filter-out 0s;
-    }
-
-    @keyframes filter-out {
-        0% {
-            filter: blur(3px);
-        }
-        25% {
-            filter: blur(2.5px);
-        }
-        50% {
-            filter: blur(1.5px);
-        }
-        75% {
-            filter: blur(0.5px);
-        }
-        100% {
-            filter: blur(0px);
-        }
-    }
-
-    @-webkit-keyframes filter-out {
-        0% {
-            filter: blur(3px);
-        }
-        25% {
-            filter: blur(2.5px);
-        }
-        50% {
-            filter: blur(1.5px);
-        }
-        75% {
-            filter: blur(0.5px);
-        }
-        100% {
-            filter: blur(0px);
-        }
-    }
-
-    @-moz-keyframes filter-out {
-        0% {
-            filter: blur(3px);
-        }
-        25% {
-            filter: blur(2.5px);
-        }
-        50% {
-            filter: blur(1.5px);
-        }
-        75% {
-            filter: blur(0.5px);
-        }
-        100% {
-            filter: blur(0px);
-        }
-    }
-
-    .bigfool-in {
-
-        animation: 2s opacity-in 0s;
-        -webkit-animation: 2s opacity-in 0s;
-        -moz-animation: 2s opacity-in 0s;
-        animation-fill-mode: forwards;
-        -webkit-animation-fill-mode: forwards;
-        -moz-animation-fill-mode: forwards;
-    }
-
-    @keyframes opacity-in {
-        0% {
-            opacity: 0;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        100% {
-            opacity: 1;
-            z-index: 999;
-        }
-    }
-
-    @-webkit-keyframes opacity-in {
-        0% {
-            opacity: 0;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        100% {
-            opacity: 1;
-            z-index: 999;
-        }
-    }
-
-    @-moz-keyframes opacity-in {
-        0% {
-            opacity: 0;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        100% {
-            opacity: 1;
-            z-index: 999;
-        }
-    }
-
-    .bigfool-out {
-        animation: 2s opacity-out 0s;
-        -webkit-animation: 2s opacity-out 0s;
-        -moz-animation: 2s opacity-out 0s;
-    }
-
-    @keyframes opacity-out {
-        0% {
-            opacity: 1;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        100% {
-            opacity: 0;
-            z-index: -1;
-        }
-    }
-
-    @-webkit-keyframes opacity-out {
-        0% {
-            opacity: 1;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        100% {
-            opacity: 0;
-            z-index: -1;
-        }
-    }
-
-    @-moz-keyframes opacity-out {
-        0% {
-            opacity: 1;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.75;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.5;
-            z-index: 999;
-        }
-        50% {
-            opacity: 0.25;
-            z-index: 999;
-        }
-        100% {
-            opacity: 0;
-            z-index: -1;
-        }
-    }
 </style>

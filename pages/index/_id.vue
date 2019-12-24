@@ -35,7 +35,7 @@
                 </div>
                 <ul class="li-item">
                     <li v-for="item in relArticles" :key="item.article_id">
-                        <nuxt-link :to="{ name: 'articles-id', params: { id: item.article_id }}"
+                        <nuxt-link :to="{ name: 'index-id', params: { id: item.article_id }}"
                                    :title="item.article_title">
                             {{item.article_title}}
                         </nuxt-link>
@@ -83,6 +83,7 @@
     },
     created() {
       this.articleId = this.$route.params.id
+      this.article.article_read += 1
     },
     mounted() {
       window.addEventListener('scroll', this.handleScroll)
@@ -91,7 +92,10 @@
       handleScroll() {
         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
         document.querySelector('.to-top-btn').classList[scrollTop > 120 ? 'add' : 'remove']('show')
-      }
+      },
+      handleTag(tag) {
+        this.$router.push({name:'index',params:{tag_id:tag.tag_id,tag_name:tag.tag_name}})
+      },
     },
     destroyed() {
       window.removeEventListener('scroll', this.handleScroll)

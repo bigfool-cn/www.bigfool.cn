@@ -29,8 +29,8 @@
         show: false,
         title: '首页',
         items: [
-          { name: 'index', title: '首页' },
-          { name: 'articles', title: '文章' },
+          { name: 'index', title: '文章' },
+          // { name: 'articles', title: '文章' },
           { name: 'tools', title: '工具' },
           { name: 'links', title: '友链' },
           { name: 'questions', title: '反馈' }
