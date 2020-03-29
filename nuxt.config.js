@@ -24,12 +24,18 @@ module.exports = {
   css: [
     '@/assets/css/main.css',
     '@/assets/css/font-awesome.min.css',
+    'codemirror/lib/codemirror.css',
+    // merge css
+    'codemirror/addon/merge/merge.css',
+    // theme css
+    'codemirror/theme/base16-dark.css',
   ],
 
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/main',
     { src: '@/plugins/vue-mavon-editor', srr: false },
+    { src: '@/plugins/code-mirror.js', ssr: false },
   ],
 
   /*

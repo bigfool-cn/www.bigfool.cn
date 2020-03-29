@@ -1,15 +1,15 @@
 <template>
     <div class="base-body" v-loading="loading" element-loading-text="拼命加载中...">
+        <el-button type="primary" size="medium" @click="handleEncode">编码</el-button>
+        <el-button type="info" size="medium" @click="handleDecode">解码</el-button>
         <div class="content">
             <span>内容:</span>
-            <el-input type="textarea" :rows="7" v-model="content" :autosize="{minRows: 7, maxRows: 10}" resize="none" />
+            <el-input type="textarea" :rows="10" v-model="content" :autosize="{minRows: 8, maxRows: 15}" />
         </div>
         <div class="result">
             <span>结果:</span>
-            <el-input type="textarea" :rows="7" v-model="result" :autosize="{minRows: 7, maxRows: 10}" resize="none" />
+            <el-input type="textarea" :rows="10" v-model="result" :autosize="{minRows: 8, maxRows: 15}" />
         </div>
-        <el-button type="primary" size="small" @click="handleEncode">编码</el-button>
-        <el-button type="primary" size="small" @click="handleDecode">解码</el-button>
     </div>
 </template>
 
@@ -63,8 +63,16 @@
 
 <style lang="scss" scoped>
     .base-body {
-        margin: 1.333rem;
+      margin: 1.333rem;
     }
+
+    .base-body /deep/ .el-button {
+        margin-left: 0px;
+        display: block;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+
     .content,
     .result {
         margin-bottom: 1.333rem;

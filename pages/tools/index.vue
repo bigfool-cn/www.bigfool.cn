@@ -13,6 +13,8 @@
             <img-base64 v-if="currentKey === 'imgtobase64'" />
             <md5 v-if="currentKey === 'md5'" />
             <hex v-if="currentKey === 'hex'" />
+            <xml v-if="currentKey === 'xml'" />
+            <json v-if="currentKey === 'json'" />
         </div>
         <bigfool-share title="Bigfool - 工具"/>
     </div>
@@ -24,9 +26,11 @@
   import ImgBase64 from './components/ImgBase64';
   import Md5 from './components/Md5';
   import Hex from './components/Hex';
+  import Xml from "./components/Xml";
+  import Json from "./components/Json";
   export default {
     name: 'tools',
-    components: { Hex, Md5, ImgBase64, Base64, Rsa },
+    components: {Json, Xml, Hex, Md5, ImgBase64, Base64, Rsa },
     data() {
       return {
         currentKey: 'rsa',
@@ -35,7 +39,9 @@
           { name: 'Base64编码/解码', key: 'base64'},
           { name: '图片转Base64', key: 'imgtobase64'},
           { name: 'MD5哈希', key: 'md5'},
-          { name: '进制转换', key: 'hex'}
+          { name: '进制转换', key: 'hex'},
+          { name: 'XML格式化', key: 'xml'},
+          { name: 'Json格式化', key: 'json'}
         ]
       }
     },
@@ -44,6 +50,9 @@
         title: 'Bigfool - 工具',
         meta: [
           { hid: 'tools', name: 'description', content: '在线工具 RSA RSA私钥生成 RSA公钥生成 Base64编码 Base64解码 图片转Base64 MD5哈希 进制转换' }
+        ],
+        script: [
+          {src:"https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"}
         ]
       }
     },

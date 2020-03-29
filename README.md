@@ -18,6 +18,8 @@ $ npm start
 # generate static project
 $ npm run generate
 ```
+### 插件源码修改
+> vue-json-editor.vue   mounted方法添加错误抛出
 
 For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
 
