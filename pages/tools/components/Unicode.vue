@@ -1,7 +1,7 @@
 <template>
     <div class="base-body" v-loading="loading" element-loading-text="拼命加载中...">
-        <el-button type="primary" size="medium" @click="handleEncode">编码</el-button>
-        <el-button type="info" size="medium" @click="handleDecode">解码</el-button>
+        <el-button type="primary" size="medium" @click="handleEncode">Unicode 转换 中文</el-button>
+        <el-button type="info" size="medium" @click="handleDecode">中文 转换 Unicode</el-button>
         <div class="content">
             <span>内容:</span>
             <el-input type="textarea" :rows="autosize.maxRows" v-model="content" :autosize="autosize" />
@@ -17,7 +17,7 @@
   import { Message } from 'element-ui'
   import { sendWebSocketData } from '@/utils/websocket'
   export default {
-    name: 'Base64',
+    name: 'Unicode',
     data() {
       return {
         autosize:{minRows: 10, maxRows: 20},
@@ -30,7 +30,7 @@
       sendWsData() {
         let data = {
           type: 'tools',
-          data: 'Base64解码/编码'
+          data: 'Unicode/中文转换'
         }
         sendWebSocketData(data)
       },
@@ -39,9 +39,9 @@
         this.loading = true
         if (this.content.trim()) {
           try {
-            this.result = window.btoa(this.content)
+            this.result = eval("'" + this.content + "'");
           } catch (e) {
-            Message.error('编码码失败，请检查内容是否合法!')
+            Message.error('转换失败，请检查内容是否合法!')
           }
         }
         this.loading = false
@@ -51,9 +51,9 @@
         this.loading = true
         if (this.content.trim()) {
           try {
-            this.result = window.atob(this.content)
+            this.result = escape(this.content).replace(/\%u/g,'\\u');
           } catch (e) {
-            Message.error('解码失败，请检查内容是否合法')
+            Message.error('转换失败，请检查内容是否合法!')
           }
         }
         this.loading = false

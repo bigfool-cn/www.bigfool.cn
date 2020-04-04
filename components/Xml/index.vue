@@ -2,6 +2,7 @@
   <div class="xml-body" v-loading="loading" element-loading-text="拼命加载中...">
     <el-button type="primary" size="medium" @click="handleXml">格式化</el-button>
     <el-button type="info" size="medium" @click="handleXml(true)">压缩</el-button>
+    <el-slider v-model="slider" :min="450" :max="900" :show-tooltip="false"></el-slider>
     <client-only>
       <codemirror v-model="code" :options="options" />
     </client-only>
@@ -17,6 +18,7 @@
     data() {
       return {
         loading: false,
+        slider: 450,
         code: '',
         options: {
           lineNumbers: true,
@@ -27,6 +29,12 @@
           autoCloseTags: true,
           moveOnDrag: false
         },
+      }
+    },
+    watch: {
+      slider (value) {
+        const ele = window.document.getElementsByClassName('CodeMirror')[0]
+        ele.style.height  = value + "px"
       }
     },
     methods: {
@@ -72,7 +80,7 @@
   .xml-body /deep/ .CodeMirror {
     font-size: 1.1rem;
     margin-top: 10px;
-    height: 400px;
-    border: 1px solid #f1f1f1;
+    height: 450px;
+    border: 1px solid #e4e7ed;
   }
 </style>

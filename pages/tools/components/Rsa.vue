@@ -9,11 +9,11 @@
         </div>
         <div class="private-key">
             <span>私钥:</span>
-            <el-input type="textarea" :rows="7" v-model="rsa.privateKey" :autosize="{minRows: 7, maxRows: 18}" resize="none" />
+            <el-input type="textarea" :rows="autosize.maxRows" v-model="rsa.privateKey" :autosize="autosize" resize="none" />
         </div>
         <div class="public-key">
             <span>公钥:</span>
-            <el-input type="textarea" :rows="7" v-model="rsa.publicKey" :autosize="{minRows: 7, maxRows: 10}" resize="none" />
+            <el-input type="textarea" :rows="autosize.maxRows" v-model="rsa.publicKey" :autosize="autosize" resize="none" />
         </div>
     </div>
 </template>
@@ -27,6 +27,7 @@
     data() {
       return {
         loading: false,
+        autosize:{minRows: 10, maxRows: 20},
         rsa: {
           privateKey: '',
           publicKey: ''

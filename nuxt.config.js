@@ -36,6 +36,8 @@ module.exports = {
     '@/plugins/main',
     { src: '@/plugins/vue-mavon-editor', srr: false },
     { src: '@/plugins/code-mirror.js', ssr: false },
+    { src: '@/plugins/xml.js', ssr: false },
+    { src: '@/plugins/json.js', ssr: false },
   ],
 
   /*

@@ -13,7 +13,7 @@
         </el-upload>
         <div class="base64">
             <span style="font-size: 1.1rem">Base64:</span>
-            <el-input type="textarea" :rows="8" v-model="base64" :autosize="{minRows: 8, maxRows: 15}" resize="none" />
+            <el-input type="textarea" :rows="10" v-model="base64" :autosize="{minRows: 10, maxRows: 20}" resize="none" />
         </div>
     </div>
 </template>

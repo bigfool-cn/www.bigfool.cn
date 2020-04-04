@@ -17,7 +17,7 @@
   import { Message } from 'element-ui'
   import { sendWebSocketData } from '@/utils/websocket'
   export default {
-    name: 'Base64',
+    name: 'Url',
     data() {
       return {
         autosize:{minRows: 10, maxRows: 20},
@@ -30,7 +30,7 @@
       sendWsData() {
         let data = {
           type: 'tools',
-          data: 'Base64解码/编码'
+          data: 'URL解码/编码'
         }
         sendWebSocketData(data)
       },
@@ -39,9 +39,9 @@
         this.loading = true
         if (this.content.trim()) {
           try {
-            this.result = window.btoa(this.content)
+            this.result = encodeURIComponent(this.content)
           } catch (e) {
-            Message.error('编码码失败，请检查内容是否合法!')
+            Message.error('编码失败，请检查内容是否合法!')
           }
         }
         this.loading = false
@@ -51,7 +51,7 @@
         this.loading = true
         if (this.content.trim()) {
           try {
-            this.result = window.atob(this.content)
+            this.result = decodeURIComponent(this.content)
           } catch (e) {
             Message.error('解码失败，请检查内容是否合法')
           }
