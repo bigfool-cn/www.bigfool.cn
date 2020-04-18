@@ -1,7 +1,9 @@
 <template>
   <div class="xml-body" v-loading="loading" element-loading-text="拼命加载中...">
-    <el-button type="primary" size="medium" @click="handleXml">格式化</el-button>
-    <el-button type="info" size="medium" @click="handleXml(true)">压缩</el-button>
+    <div class="btn-block">
+      <el-button type="primary" size="medium" @click="handleXml">格式化</el-button>
+      <el-button type="info" size="medium" @click="handleXml(true)">压缩</el-button>
+    </div>
     <el-slider v-model="slider" :min="450" :max="900" :show-tooltip="false"></el-slider>
     <client-only>
       <codemirror v-model="code" :options="options" />
@@ -70,11 +72,17 @@
     margin: 1.333rem;
   }
 
+  .btn-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .xml-body /deep/ .el-button {
-    margin-left: 0px;
     display: block;
     margin-bottom: 5px;
-    width: 100%;
+    width: 49%;
   }
 
   .xml-body /deep/ .CodeMirror {
