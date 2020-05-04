@@ -3,11 +3,11 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Bigfool - 大笨蛋程序员',
+    title: 'Bigfool - CURD每一天',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Bigfool-大笨蛋程序员,一个PHP从业者记录学习过程所遇技术点的博客站点，并将所学技术应用到Bigfool博客站点，技术点囊括：PHP php ThinkPHP thinkphp Laravel laravel JavaScript javascript CSS css Vue vue Nuxt.js nuxt.js Linux linux Nginx nginx Redis redis Memcache memcache MySQL mysql Docker ocker等等' }
+      { hid: 'description', name: 'description', content: 'Bigfool-CURD每一天,一个PHP从业者记录学习过程所遇技术点的博客站点，并将所学技术应用到Bigfool博客站点，技术点囊括：PHP php ThinkPHP thinkphp Laravel laravel JavaScript javascript CSS css Vue vue Nuxt.js nuxt.js Linux linux Nginx nginx Redis redis Memcache memcache MySQL mysql Docker ocker等等' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
