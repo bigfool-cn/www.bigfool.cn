@@ -7,17 +7,17 @@
         >
             <ul class="share">
                 <li>
-                    <a :href="qqShareLink" target="_blank" title="QQ">
+                    <a :href="qqShareLink" target="_blank" title="分享到QQ">
                         <img src="~/assets/img/qq.png" >
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0);" title="微信" @click="weChat">
+                    <a href="javascript:void(0);" title="分享到微信" @click="weChat">
                         <img src="~/assets/img/wechat.png" >
                     </a>
                 </li>
                 <li v-if="false">
-                    <a href="javascript:void(0);" title="新浪微博">
+                    <a href="javascript:void(0);" title="分享到新浪微博">
                         <img src="~/assets/img/weibo.png" >
                     </a>
                 </li>
