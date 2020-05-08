@@ -20,7 +20,7 @@
       <hex v-if="currentKey === 'hex'"/>
       <rsa v-if="currentKey === 'rsa'"/>
     </div>
-    <bigfool-share title="Bigfool - 工具"/>
+    <bigfool-share title="Bigfool - 在线工具"/>
   </div>
 </template>
 
