@@ -29,6 +29,10 @@
                     </nuxt-link>
                 </ul>
             </div>
+            <div class="footer">
+              <p>@2019 Design By Bigfool</p>
+              <p><a href="http://beian.miit.gov.cn" target="_blank">粤ICP备17147325号</a></p>
+            </div>
         </div>
         <div class="l-aside">
             <div class="item tags">
@@ -57,10 +61,6 @@
                         </nuxt-link>
                     </li>
                 </ul>
-            </div>
-            <div class="footer">
-              <p>@2019 Design By Bigfool</p>
-              <p><a href="http://beian.miit.gov.cn" target="_blank">粤ICP备17147325号-1</a></p>
             </div>
         </div>
         <bigfool-share title="Bigfool - 文章"/>
@@ -244,7 +244,10 @@
 
     .footer {
       text-align: center;
-      padding: 0 1.333rem;
+      padding: 1.333rem 0 0 0;
+      p {
+        line-height: 1.5rem;
+      }
     }
 
     @keyframes articleItem {

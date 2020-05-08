@@ -31,7 +31,7 @@
         items: [
           { name: 'index', title: '文章' },
           // { name: 'articles', title: '文章' },
-          { name: 'tools', title: '工具' },
+          { name: 'tools', title: '在线工具' },
           { name: 'links', title: '友链' },
           { name: 'questions', title: '反馈' }
         ]
