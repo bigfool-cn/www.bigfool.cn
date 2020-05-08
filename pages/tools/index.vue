@@ -53,7 +53,7 @@
     },
     head() {
       return {
-        title: 'Bigfool - 工具',
+        title: 'Bigfool - 在线工具',
         meta: [
           {
             hid: 'tools',

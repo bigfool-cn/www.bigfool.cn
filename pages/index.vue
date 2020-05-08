@@ -10,9 +10,9 @@
   export default {
     head () {
       return {
-        title: 'Bigfool - 大笨蛋程序员',
+        title: 'Bigfool - CURD每一天',
         meta: [
-          { hid: 'index', name: 'home', content: 'Bigfool PHP ThinkPHP Laravel JavaScript CSS Vue Nuxt.js Linux Nginx Redis Memcache MySQL 程序员 博客' }
+          { hid: 'index', name: 'home', content: ' CURD  CURD每一天 Bigfool PHP ThinkPHP Laravel JavaScript CSS Vue Nuxt.js Linux Nginx Redis Memcache MySQL 程序员 博客' }
         ]
       }
     }
