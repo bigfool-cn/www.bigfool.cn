@@ -18,9 +18,11 @@
       <img-base64 v-if="currentKey === 'imgtobase64'"/>
       <md5 v-if="currentKey === 'md5'"/>
       <hex v-if="currentKey === 'hex'"/>
+      <regex v-if="currentKey === 'regex'"/>
       <rsa v-if="currentKey === 'rsa'"/>
     </div>
     <bigfool-share title="Bigfool - 在线工具"/>
+    <bigfool-totop />
   </div>
 </template>
 
@@ -32,9 +34,10 @@
   import Hex from './components/Hex';
   import Url from "./components/Url";
   import Unicode from "./components/Unicode";
+  import Regex from "./components/Regex";
   export default {
     name: 'tools',
-    components: {Unicode, Url, Hex, Md5, ImgBase64, Base64, Rsa },
+    components: {Unicode, Url, Hex, Md5, ImgBase64, Base64, Rsa, Regex },
     data() {
       return {
         currentKey: 'json',
@@ -47,6 +50,7 @@
           {name: '图片转Base64', key: 'imgtobase64'},
           {name: 'MD5哈希', key: 'md5'},
           {name: '进制转换', key: 'hex'},
+          {name: '正则表达式', key: 'regex'},
           {name: 'RSA私钥/公钥生成', key: 'rsa'},
         ]
       }
@@ -63,11 +67,24 @@
         ]
       }
     },
+    mounted() {
+      window.addEventListener('scroll', this.handleScroll)
+    },
     methods: {
       handleMenu(key) {
         this.currentKey = key
-      }
-    }
+      },
+      handleScroll() {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        document.querySelector('.to-top-btn').classList[scrollTop > 120 ? 'add' : 'remove']('show')
+      },
+      handleTag(tag) {
+        this.$router.push({name:'index',params:{tag_id:tag.tag_id,tag_name:tag.tag_name}})
+      },
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll)
+    },
   }
 </script>
 
